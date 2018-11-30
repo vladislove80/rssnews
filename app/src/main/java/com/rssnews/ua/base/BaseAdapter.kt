@@ -1,37 +1,26 @@
 package com.rssnews.ua.base
 
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.RecyclerView
-import android.view.View
+import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.category.view.*
 
 /**
  * Created by Vladyslav Ulianytskyi on 28.11.2018.
  */
-abstract class BaseAdapter<T>(private val listener: BaseHolder.OnItemClickListener<T>? = null) : RecyclerView.Adapter<BaseHolder<T>>() {
+abstract class BaseAdapter<T>(private val listener: BaseHolder.OnItemClickListener<T>? = null) :
+    RecyclerView.Adapter<BaseHolder<T>>() {
 
     val items: MutableList<T> = mutableListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder<T> = onCreateHolder(parent, viewType).apply {
-        setOnItemClickListener(listener)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder<T> =
+        onCreateHolder(parent, viewType).apply {
+            setOnItemClickListener(listener)
+        }
 
     override fun onBindViewHolder(holder: BaseHolder<T>, position: Int) {
+        Log.d("BaseAdapter", "$holder, ${items[position]}, ${holder.containerView.tvCategory.chipBackgroundColor}")
         holder.bindModel(items[position])
-        setTransitionName(holder.itemView, position)
-    }
-
-    //todo check it
-    private fun setTransitionName(view: View, position: Int) {
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                view.getChildAt(i)?.run {
-                    ViewCompat.setTransitionName(this, "${this.hashCode()} $position")
-                }
-            }
-        } else {
-            ViewCompat.setTransitionName(view, "${view.hashCode()} $position")
-        }
     }
 
     abstract fun onCreateHolder(recyclerView: ViewGroup, viewType: Int): BaseHolder<T>

@@ -1,8 +1,9 @@
 package com.rssnews.ua.regional
 
 import android.os.Bundle
-import android.view.View
+import com.rssnews.data.Categories
 import com.rssnews.ua.base.BaseFragment
+import com.rssnews.ua.base.categoriesKey
 
 /**
  * Created by Vladyslav Ulianytskyi on 29.11.2018.
@@ -10,16 +11,10 @@ import com.rssnews.ua.base.BaseFragment
 
 class RegionalNewsFragment : BaseFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        showContent()
-    }
-
     companion object {
-        private val tag = RegionalNewsFragment::class.java.simpleName
-        fun newInstance(): RegionalNewsFragment {
-            return RegionalNewsFragment()
+        private val TAG = RegionalNewsFragment::class.java.simpleName
+        fun newInstance(categories: Categories) = RegionalNewsFragment().apply {
+            arguments = Bundle().apply { putParcelable(categoriesKey, categories) }
         }
     }
 }

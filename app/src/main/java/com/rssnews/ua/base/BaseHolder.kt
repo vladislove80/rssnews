@@ -1,20 +1,21 @@
 package com.rssnews.ua.base
 
 import android.content.Context
-import android.support.annotation.LayoutRes
-import android.support.annotation.StringRes
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Created by Vladyslav Ulianytskyi on 28.11.2018.
  */
 
-abstract class BaseHolder<T>(recyclerView: ViewGroup, @LayoutRes layoutId: Int, viewIds: IntArray? = null) :
-    RecyclerView.ViewHolder(createView(recyclerView, layoutId)), View.OnClickListener, LayoutContainer {
+abstract class BaseHolder<T>(recyclerView: ViewGroup, @LayoutRes layoutId: Int, viewIds: IntArray? = null) : RecyclerView.ViewHolder(createView(recyclerView, layoutId)), View.OnClickListener, LayoutContainer {
 
     protected val context: Context = itemView.context
 
@@ -49,6 +50,8 @@ abstract class BaseHolder<T>(recyclerView: ViewGroup, @LayoutRes layoutId: Int, 
     }
 
     protected fun getString(@StringRes stringId: Int): String = context.getString(stringId)
+
+    protected fun getColorStateList(@ColorRes colorId: Int) = ContextCompat.getColorStateList(context, colorId)
 
     interface OnItemClickListener<T> {
         fun onItemViewClick(view: View, model: T)

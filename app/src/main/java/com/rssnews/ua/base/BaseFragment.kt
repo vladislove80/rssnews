@@ -1,11 +1,15 @@
 package com.rssnews.ua.base
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.rssnews.R
+import com.rssnews.data.Categories
+import com.rssnews.data.Category
+import com.rssnews.ua.categories.CategoriesAdapter
 import com.rssnews.util.gone
 import com.rssnews.util.visible
 import kotlinx.android.synthetic.main.fragment_news.*
@@ -14,7 +18,14 @@ import kotlinx.android.synthetic.main.fragment_news.*
  * Created by Vladyslav Ulianytskyi on 28.11.2018.
  */
 
-open class BaseFragment : Fragment() {
+const val categoriesKey = "category"
+open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
+
+    override fun onItemViewClick(view: View, model: Category) {
+        when (view.id) {
+            R.id.tvCategory -> { getCategoriesAdapter().setSelected(model) }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_news, container, false)
@@ -26,22 +37,39 @@ open class BaseFragment : Fragment() {
         btnRetry.setOnClickListener {
             //todo implement retry get data
         }
+        initCategoriesAdapter()
     }
 
+    private fun initCategoriesAdapter(): CategoriesAdapter {
+        val categories = arguments?.getParcelable<Categories>(categoriesKey)?.categories ?: mutableListOf()
+        rvCategories.apply {
+            val categoriesAdapter = CategoriesAdapter(this@BaseFragment)
+            (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+            categoriesAdapter.addNewItems(categories)
+            adapter = categoriesAdapter
+            return categoriesAdapter
+        }
+    }
+
+    fun getCategoriesAdapter() = rvCategories.adapter as? CategoriesAdapter ?: initCategoriesAdapter()
+
     fun showProgress() {
-        recyclerView.gone()
+        rvNews.gone()
         btnRetry.gone()
+        rvCategories.gone()
         progressBar.visible()
     }
 
     fun showContent() {
-        recyclerView.visible()
+        rvNews.visible()
+        rvCategories.visible()
         btnRetry.gone()
         progressBar.gone()
     }
 
     fun showRetry() {
-        recyclerView.gone()
+        rvNews.gone()
+        rvCategories.gone()
         btnRetry.visible()
         progressBar.gone()
     }

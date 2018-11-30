@@ -1,8 +1,9 @@
 package com.rssnews.ua.sport
 
 import android.os.Bundle
-import android.view.View
+import com.rssnews.data.Categories
 import com.rssnews.ua.base.BaseFragment
+import com.rssnews.ua.base.categoriesKey
 
 /**
  * Created by Vladyslav Ulianytskyi on 29.11.2018.
@@ -10,17 +11,10 @@ import com.rssnews.ua.base.BaseFragment
 
 class SportNewsFragment : BaseFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        showRetry()
-
-    }
-
     companion object {
-        private val tag = SportNewsFragment::class.java.simpleName
-        fun newInstance(): SportNewsFragment {
-            return SportNewsFragment()
+        private val TAG = SportNewsFragment::class.java.simpleName
+        fun newInstance(categories: Categories) = SportNewsFragment().apply {
+            arguments = Bundle().apply { putParcelable(categoriesKey, categories) }
         }
     }
 }
