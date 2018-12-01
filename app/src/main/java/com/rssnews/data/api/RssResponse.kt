@@ -1,8 +1,6 @@
 package com.rssnews.data.api
 
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.Root
+import org.simpleframework.xml.*
 
 /**
  * Created by Vladyslav Ulianytskyi on 30.11.2018.
@@ -17,8 +15,8 @@ class RssResponse {
 
 @Root(name = "channel", strict = false)
 class RssChannel {
-    @set:ElementList(name = "item", inline = true)
-    @get:ElementList(name = "item", inline = true)
+    @set:ElementList(name = "item", inline = true, required = false)
+    @get:ElementList(name = "item", inline = true, required = false)
     var rssItems: List<RssItem> = ArrayList()
 }
 
@@ -33,10 +31,10 @@ class RssItem {
     @set:Element(name = "pubDate")
     @get:Element(name = "pubDate")
     var pubDate = ""
-    @set:Element(data = true, name = "description")
-    @get:Element(data = true, name = "description")
+    @set:Element(name = "author")
+    @get:Element(name = "author")
     var author = ""
-    @set:Element(data = true, name = "author")
-    @get:Element(data = true, name = "author")
+    @set:Element(name = "description", required = false)
+    @get:Element(name = "description", required = false)
     var description: String = ""
 }
