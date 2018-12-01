@@ -36,7 +36,7 @@ class NewsViewModel : ViewModel() {
     fun parseResponse(response: RssResponse?): MutableList<NewsListItem> {
         val list = ArrayList<NewsListItem>()
         response?.rssChannel?.rssItems?.forEach {
-            list.add(NewsListItem(it.title, it.pubDate, it.author, it.link, it.description))
+            list.add(NewsListItem(it.title, it.pubDate, it.author, it.link, description = it.description))
         }
         return list
     }

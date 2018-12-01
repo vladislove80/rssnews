@@ -92,7 +92,7 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
 
     fun showRetry() {
         rvNews.gone()
-        rvCategories.gone()
+//        rvCategories.gone()
         btnRetry.visible()
         progressBar.gone()
     }
