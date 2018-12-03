@@ -4,8 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.rssnews.data.api.CBCApi
+import com.rssnews.data.api.RssItem
 import com.rssnews.data.api.RssResponse
 import com.rssnews.ua.base.BaseFragment
+import com.rssnews.util.getImageDescription
+import com.rssnews.util.getImageSrcFromHTML
+import com.rssnews.util.getNewsDescription
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,10 +38,12 @@ class NewsViewModel : ViewModel() {
     }
 
     fun parseResponse(response: RssResponse?): MutableList<NewsListItem> {
-        val list = ArrayList<NewsListItem>()
-        response?.rssChannel?.rssItems?.forEach {
-            list.add(NewsListItem(it.title, it.pubDate, it.author, it.link, description = it.description))
+        return ArrayList<NewsListItem>().apply {
+            response?.rssChannel?.rssItems?.forEach { this.add(creteItem(it)) }
         }
-        return list
+    }
+
+    private fun creteItem(it: RssItem): NewsListItem {
+        return NewsListItem(it.title, it.pubDate, it.author, it.link, imageLink = getImageSrcFromHTML(it.description), imageDescription = getImageDescription(it.description), description = getNewsDescription(it.description))
     }
 }

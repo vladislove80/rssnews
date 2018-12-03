@@ -29,6 +29,7 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
         when (view.id) {
             R.id.tvCategory -> {
                 getCategoriesAdapter().setSelected(model)
+                getNewsAdapter().clearItems()
                 showProgress()
                 NewsViewModel.of(this).getNews(model.link)
             }
@@ -77,7 +78,7 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
     fun getNewsAdapter() = rvNews.adapter as? NewsAdapter ?: initNewsAdapter()
 
     fun showProgress() {
-        rvNews.gone()
+//        rvNews.gone()
         btnRetry.gone()
 //        rvCategories.gone()
         progressBar.visible()

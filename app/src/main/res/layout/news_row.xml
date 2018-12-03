@@ -17,41 +17,42 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textStyle="bold"
-            tools:text="title" />
+            tools:text="Title" />
 
         <TextView
-            android:id="@+id/author"
+            android:id="@+id/tvAuthorAndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            tools:text="author" />
-
-        <TextView
-            android:id="@+id/pubDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            tools:text="pub_date" />
-
-        <TextView
-            android:id="@+id/imageDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:textStyle="italic"
-            tools:text="description" />
+            tools:text="Author and date" />
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/description"
+            android:id="@+id/tvImageDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:textSize="10sp"
+            android:textStyle="italic"
+            tools:ignore="SmallSp"
+            tools:text="Image description" />
+
+        <TextView
+            android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            tools:text="description" />
+            tools:text="News description" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
