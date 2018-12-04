@@ -8,7 +8,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.rssnews.data.model.Categories
-import com.rssnews.data.model.NewsListItem
+import com.rssnews.data.model.NewsItem
 import com.rssnews.data.NewsViewModel
 import com.rssnews.ua.base.BaseFragment
 import com.rssnews.ua.base.categoriesKey
@@ -35,7 +35,7 @@ class GeneralNewsFragment : BaseFragment() {
 
     private fun observeViewModel() {
         NewsViewModel.of(this).apply {
-            newsLiveData.observe(this@GeneralNewsFragment, Observer<MutableList<NewsListItem>> {
+            newsLiveData.observe(this@GeneralNewsFragment, Observer<MutableList<NewsItem>> {
                 getNewsAdapter().clearItems()
                 getNewsAdapter().addNewItems(it)
                 showContent()

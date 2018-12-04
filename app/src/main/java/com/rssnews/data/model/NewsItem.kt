@@ -3,7 +3,7 @@ package com.rssnews.data.model
 /**
  * Created by Vladyslav Ulianytskyi on 29.11.2018.
  */
-data class NewsListItem(
+data class NewsItem(
     val title: String = "",
     val date: String = "",
     val author: String = "",

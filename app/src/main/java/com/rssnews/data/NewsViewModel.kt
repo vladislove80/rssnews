@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.rssnews.data.api.CBCApi
 import com.rssnews.data.api.RssItem
 import com.rssnews.data.api.RssResponse
-import com.rssnews.data.model.NewsListItem
+import com.rssnews.data.model.NewsItem
 import com.rssnews.ua.base.BaseFragment
 import com.rssnews.util.getImageDescription
 import com.rssnews.util.getImageSrcFromHTML
@@ -21,7 +21,7 @@ import retrofit2.Response
 class NewsViewModel : ViewModel() {
     private val baseURL = "https://rss.cbc.ca/"
 
-    val newsLiveData: MutableLiveData<MutableList<NewsListItem>> = MutableLiveData()
+    val newsLiveData: MutableLiveData<MutableList<NewsItem>> = MutableLiveData()
     val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
 
     fun getNews(link: String) = CBCApi.create(baseURL).getRssData(link).enqueue(object : Callback<RssResponse> {
@@ -38,14 +38,14 @@ class NewsViewModel : ViewModel() {
         fun of(frag: BaseFragment) = ViewModelProviders.of(frag).get(NewsViewModel::class.java)
     }
 
-    fun parseResponse(response: RssResponse?): MutableList<NewsListItem> {
-        return ArrayList<NewsListItem>().apply {
+    fun parseResponse(response: RssResponse?): MutableList<NewsItem> {
+        return ArrayList<NewsItem>().apply {
             response?.rssChannel?.rssItems?.forEach { this.add(creteItem(it)) }
         }
     }
 
-    private fun creteItem(it: RssItem): NewsListItem {
-        return NewsListItem(
+    private fun creteItem(it: RssItem): NewsItem {
+        return NewsItem(
             it.title,
             it.pubDate,
             it.author,
