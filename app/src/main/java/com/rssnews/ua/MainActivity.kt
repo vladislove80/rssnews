@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rssnews.R
-import com.rssnews.data.Categories
+import com.rssnews.data.model.Categories
 import com.rssnews.ua.base.BaseFragment
 import com.rssnews.ua.general.GeneralNewsFragment
 import com.rssnews.ua.regional.RegionalNewsFragment

@@ -3,7 +3,7 @@ package com.rssnews.ua
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.rssnews.R
-import com.rssnews.data.NewsListItem
+import com.rssnews.data.model.NewsListItem
 import com.rssnews.ua.base.BaseHolder
 import kotlinx.android.synthetic.main.news_row.*
 

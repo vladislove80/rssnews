@@ -7,8 +7,8 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.rssnews.data.Categories
-import com.rssnews.data.NewsListItem
+import com.rssnews.data.model.Categories
+import com.rssnews.data.model.NewsListItem
 import com.rssnews.data.NewsViewModel
 import com.rssnews.ua.base.BaseFragment
 import com.rssnews.ua.base.categoriesKey
@@ -22,7 +22,7 @@ class GeneralNewsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d(TAG, "response ")
+        Log.d(TAG, "onViewCreated ")
         val link = arguments?.getParcelable<Categories>(categoriesKey)?.categories!![0].link
         NewsViewModel.of(this).getNews(link)
         rvNews.addOnScrollListener(onScrollListener)
@@ -36,7 +36,6 @@ class GeneralNewsFragment : BaseFragment() {
     private fun observeViewModel() {
         NewsViewModel.of(this).apply {
             newsLiveData.observe(this@GeneralNewsFragment, Observer<MutableList<NewsListItem>> {
-                //                Log.d(TAG, "newsLiveData $it")
                 getNewsAdapter().clearItems()
                 getNewsAdapter().addNewItems(it)
                 showContent()

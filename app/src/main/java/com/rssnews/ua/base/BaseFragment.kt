@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.rssnews.R
-import com.rssnews.data.Categories
-import com.rssnews.data.Category
-import com.rssnews.data.NewsListItem
+import com.rssnews.data.model.Categories
+import com.rssnews.data.model.Category
+import com.rssnews.data.model.NewsListItem
 import com.rssnews.data.NewsViewModel
 import com.rssnews.ua.NewsAdapter
 import com.rssnews.ua.categories.CategoriesAdapter

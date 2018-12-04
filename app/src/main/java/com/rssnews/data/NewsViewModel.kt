@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.rssnews.data.api.CBCApi
 import com.rssnews.data.api.RssItem
 import com.rssnews.data.api.RssResponse
+import com.rssnews.data.model.NewsListItem
 import com.rssnews.ua.base.BaseFragment
 import com.rssnews.util.getImageDescription
 import com.rssnews.util.getImageSrcFromHTML
@@ -44,6 +45,14 @@ class NewsViewModel : ViewModel() {
     }
 
     private fun creteItem(it: RssItem): NewsListItem {
-        return NewsListItem(it.title, it.pubDate, it.author, it.link, imageLink = getImageSrcFromHTML(it.description), imageDescription = getImageDescription(it.description), description = getNewsDescription(it.description))
+        return NewsListItem(
+            it.title,
+            it.pubDate,
+            it.author,
+            it.link,
+            imageLink = getImageSrcFromHTML(it.description),
+            imageDescription = getImageDescription(it.description),
+            description = getNewsDescription(it.description)
+        )
     }
 }

@@ -1,7 +1,7 @@
 package com.rssnews.ua.categories
 
 import android.view.ViewGroup
-import com.rssnews.data.Category
+import com.rssnews.data.model.Category
 import com.rssnews.ua.base.BaseAdapter
 import com.rssnews.ua.base.BaseHolder
 

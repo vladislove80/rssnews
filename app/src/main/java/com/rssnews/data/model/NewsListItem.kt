@@ -1,4 +1,4 @@
-package com.rssnews.data
+package com.rssnews.data.model
 
 /**
  * Created by Vladyslav Ulianytskyi on 29.11.2018.

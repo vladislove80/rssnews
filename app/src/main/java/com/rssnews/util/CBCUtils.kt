@@ -1,6 +1,6 @@
 package com.rssnews.util
 
-import com.rssnews.data.Category
+import com.rssnews.data.model.Category
 
 /**
  * Created by Vladyslav Ulianytskyi on 29.11.2018.

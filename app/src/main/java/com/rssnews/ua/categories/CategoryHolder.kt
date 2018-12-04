@@ -3,7 +3,7 @@ package com.rssnews.ua.categories
 import android.util.Log
 import android.view.ViewGroup
 import com.rssnews.R
-import com.rssnews.data.Category
+import com.rssnews.data.model.Category
 import com.rssnews.ua.base.BaseHolder
 import kotlinx.android.synthetic.main.category.*
 
