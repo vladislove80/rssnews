@@ -1,19 +1,21 @@
 package com.rssnews.ua.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.rssnews.R
+import com.rssnews.data.NewsViewModel
 import com.rssnews.data.model.Categories
 import com.rssnews.data.model.Category
 import com.rssnews.data.model.NewsItem
-import com.rssnews.data.NewsViewModel
 import com.rssnews.ua.NewsAdapter
 import com.rssnews.ua.categories.CategoriesAdapter
 import com.rssnews.util.gone
+import com.rssnews.util.obtainViewModel
 import com.rssnews.util.visible
 import kotlinx.android.synthetic.main.fragment_news.*
 
@@ -25,15 +27,23 @@ const val categoriesKey = "category"
 
 open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
 
+    lateinit var viewModel: NewsViewModel
+
     override fun onItemViewClick(view: View, model: Category) {
         when (view.id) {
             R.id.tvCategory -> {
                 getCategoriesAdapter().setSelected(model)
                 getNewsAdapter().clearItems()
                 showProgress()
-                NewsViewModel.of(this).getNews(model.link)
+                viewModel.getNews(model.categoryName, model.link)
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("BaseFragment", "onCreate")
+        viewModel = obtainViewModel()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -97,4 +107,6 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
         btnRetry.visible()
         progressBar.gone()
     }
+
+    private fun obtainViewModel(): NewsViewModel = obtainViewModel(NewsViewModel::class.java)
 }

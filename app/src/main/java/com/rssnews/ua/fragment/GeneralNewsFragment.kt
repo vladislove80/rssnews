@@ -1,4 +1,4 @@
-package com.rssnews.ua.general
+package com.rssnews.ua.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.rssnews.data.model.Categories
 import com.rssnews.data.model.NewsItem
-import com.rssnews.data.NewsViewModel
 import com.rssnews.ua.base.BaseFragment
 import com.rssnews.ua.base.categoriesKey
 import kotlinx.android.synthetic.main.fragment_news.*
@@ -19,13 +18,9 @@ import kotlinx.android.synthetic.main.fragment_news.*
  */
 class GeneralNewsFragment : BaseFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        Log.d(TAG, "onViewCreated ")
-        val link = arguments?.getParcelable<Categories>(categoriesKey)?.categories!![0].link
-        NewsViewModel.of(this).getNews(link)
-        rvNews.addOnScrollListener(onScrollListener)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate ")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -33,9 +28,18 @@ class GeneralNewsFragment : BaseFragment() {
         observeViewModel()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val category = arguments?.getParcelable<Categories>(categoriesKey)?.categories?.get(0)
+        val link = category?.link ?: ""
+        val categoryName = category?.categoryName ?: ""
+        viewModel.getNews(categoryName, link)
+        rvNews.addOnScrollListener(onScrollListener)
+    }
+
     private fun observeViewModel() {
-        NewsViewModel.of(this).apply {
-            newsLiveData.observe(this@GeneralNewsFragment, Observer<MutableList<NewsItem>> {
+        viewModel.apply {
+            newsLiveData.observe(this@GeneralNewsFragment, Observer<List<NewsItem>> {
                 getNewsAdapter().clearItems()
                 getNewsAdapter().addNewItems(it)
                 showContent()
@@ -49,11 +53,10 @@ class GeneralNewsFragment : BaseFragment() {
 
     companion object {
 
-        private val TAG = GeneralNewsFragment::class.java.simpleName
+        private const val TAG = "GeneralNewsFragment"
         fun newInstance(categories: Categories) = GeneralNewsFragment().apply {
             arguments = Bundle().apply { putParcelable(categoriesKey, categories) }
         }
-
     }
 }
 

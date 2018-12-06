@@ -1,6 +1,8 @@
 package com.rssnews.data.api
 
-import org.simpleframework.xml.*
+import org.simpleframework.xml.Element
+import org.simpleframework.xml.ElementList
+import org.simpleframework.xml.Root
 
 /**
  * Created by Vladyslav Ulianytskyi on 30.11.2018.
@@ -31,8 +33,8 @@ class RssItem {
     @set:Element(name = "pubDate")
     @get:Element(name = "pubDate")
     var pubDate = ""
-    @set:Element(name = "author")
-    @get:Element(name = "author")
+    @set:Element(name = "author", required = false)
+    @get:Element(name = "author", required = false)
     var author = ""
     @set:Element(name = "description", required = false)
     @get:Element(name = "description", required = false)
