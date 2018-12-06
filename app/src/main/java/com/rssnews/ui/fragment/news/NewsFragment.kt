@@ -8,6 +8,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.rssnews.data.model.Categories
+import com.rssnews.data.model.Category
 import com.rssnews.data.model.NewsItem
 import com.rssnews.ui.fragment.base.BaseFragment
 import com.rssnews.ui.fragment.base.CATEGORIES_KEY
@@ -31,9 +32,7 @@ class NewsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val category = arguments?.getParcelable<Categories>(CATEGORIES_KEY)?.categories?.get(0)
-        val link = category?.link ?: ""
-        val categoryName = category?.categoryName ?: ""
-        viewModel.getNews(categoryName, link)
+        viewModel.getNews(category ?: Category("", ""))
         rvNews.addOnScrollListener(onScrollListener)
     }
 
