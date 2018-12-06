@@ -1,10 +1,10 @@
-package com.rssnews.ua
+package com.rssnews.ua.fragment
 
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.rssnews.R
 import com.rssnews.data.model.NewsItem
-import com.rssnews.ua.base.BaseHolder
+import com.rssnews.ua.fragment.base.BaseHolder
 import kotlinx.android.synthetic.main.news_row.*
 
 /**

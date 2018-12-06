@@ -9,14 +9,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.rssnews.data.model.Categories
 import com.rssnews.data.model.NewsItem
-import com.rssnews.ua.base.BaseFragment
-import com.rssnews.ua.base.categoriesKey
+import com.rssnews.ua.fragment.base.BaseFragment
+import com.rssnews.ua.fragment.base.categoriesKey
 import kotlinx.android.synthetic.main.fragment_news.*
 
 /**
  * Created by Vladyslav Ulianytskyi on 29.11.2018.
  */
-class GeneralNewsFragment : BaseFragment() {
+class NewsFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +39,12 @@ class GeneralNewsFragment : BaseFragment() {
 
     private fun observeViewModel() {
         viewModel.apply {
-            newsLiveData.observe(this@GeneralNewsFragment, Observer<List<NewsItem>> {
+            newsLiveData.observe(this@NewsFragment, Observer<List<NewsItem>> {
                 getNewsAdapter().clearItems()
                 getNewsAdapter().addNewItems(it)
                 showContent()
             })
-            errorLiveData.observe(this@GeneralNewsFragment, Observer<Throwable> {
+            errorLiveData.observe(this@NewsFragment, Observer<Throwable> {
                 Log.d(TAG, "errorLiveData $it")
                 showRetry()
             })
@@ -53,14 +53,14 @@ class GeneralNewsFragment : BaseFragment() {
 
     companion object {
 
-        private const val TAG = "GeneralNewsFragment"
-        fun newInstance(categories: Categories) = GeneralNewsFragment().apply {
+        private const val TAG = "NewsFragment"
+        fun newInstance(categories: Categories) = NewsFragment().apply {
             arguments = Bundle().apply { putParcelable(categoriesKey, categories) }
         }
     }
 }
 
-private val GeneralNewsFragment.onScrollListener: RecyclerView.OnScrollListener
+private val NewsFragment.onScrollListener: RecyclerView.OnScrollListener
     get() {
         return object : RecyclerView.OnScrollListener() {
             var scrollDist = 0

@@ -4,7 +4,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import com.rssnews.ViewModelFactory
+import com.rssnews.ua.viewmodel.ViewModelFactory
 import java.util.regex.Pattern
 
 

@@ -1,7 +1,8 @@
-package com.rssnews.data
+package com.rssnews.ua.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.rssnews.data.NewsRepository
 import com.rssnews.data.model.NewsItem
 import com.rssnews.data.source.NewsDataSource
 

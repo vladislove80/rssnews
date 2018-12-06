@@ -1,4 +1,4 @@
-package com.rssnews.ua.base
+package com.rssnews.ua.fragment.base
 
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.rssnews.R
-import com.rssnews.data.NewsViewModel
+import com.rssnews.ua.viewmodel.NewsViewModel
 import com.rssnews.data.model.Categories
 import com.rssnews.data.model.Category
 import com.rssnews.data.model.NewsItem
-import com.rssnews.ua.NewsAdapter
-import com.rssnews.ua.categories.CategoriesAdapter
+import com.rssnews.ua.fragment.NewsAdapter
+import com.rssnews.ua.fragment.NewsCategoriesAdapter
 import com.rssnews.util.gone
 import com.rssnews.util.obtainViewModel
 import com.rssnews.util.visible
@@ -72,18 +72,18 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
         }
     }
 
-    private fun initCategoriesAdapter(): CategoriesAdapter {
+    private fun initCategoriesAdapter(): NewsCategoriesAdapter {
         val categories = arguments?.getParcelable<Categories>(categoriesKey)?.categories ?: mutableListOf()
         rvCategories.apply {
-            val categoriesAdapter = CategoriesAdapter(this@BaseFragment)
+            val newsCategoriesAdapter = NewsCategoriesAdapter(this@BaseFragment)
             (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
-            categoriesAdapter.addNewItems(categories)
-            adapter = categoriesAdapter
-            return categoriesAdapter
+            newsCategoriesAdapter.addNewItems(categories)
+            adapter = newsCategoriesAdapter
+            return newsCategoriesAdapter
         }
     }
 
-    fun getCategoriesAdapter() = rvCategories.adapter as? CategoriesAdapter ?: initCategoriesAdapter()
+    fun getCategoriesAdapter() = rvCategories.adapter as? NewsCategoriesAdapter ?: initCategoriesAdapter()
 
     fun getNewsAdapter() = rvNews.adapter as? NewsAdapter ?: initNewsAdapter()
 
