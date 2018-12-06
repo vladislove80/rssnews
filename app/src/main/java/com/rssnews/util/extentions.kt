@@ -4,16 +4,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import com.rssnews.ua.viewmodel.ViewModelFactory
-import java.util.regex.Pattern
+import com.rssnews.ui.viewmodel.ViewModelFactory
 
 
 /**
  * Created by Vladyslav Ulianytskyi on 28.11.2018.
  */
 
-fun <T : ViewModel> Fragment.obtainViewModel(viewModelClass: Class<T>) =
-    ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(viewModelClass)
+fun <T : ViewModel> Fragment.obtainViewModel(viewModelClass: Class<T>) = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(viewModelClass)
 
 fun View.visible() {
     visibility = View.VISIBLE
@@ -25,27 +23,4 @@ fun View.invisible() {
 
 fun View.gone() {
     visibility = View.GONE
-}
-
-fun getImageSrcFromHTML(html: String): String {
-    Pattern.compile("<img[^>]*src=[\\\"']([^\\\"^']*)").matcher(html).apply {
-        return if (this.find()) {
-            val src = this.group()
-            src.substring(src.indexOf("src=") + 5, src.length)
-        } else ""
-    }
-}
-
-fun getImageDescription(htmlDescription: String): String {
-    Pattern.compile("<img[^>]*title=[\\\"']([^\\\"^']*)").matcher(htmlDescription).apply {
-        return if (this.find()) {
-            val src = this.group()
-            src.substring(src.indexOf("title=") + 7, src.length)
-                .replace("&#39;", "\'")
-        } else ""
-    }
-}
-
-fun getNewsDescription(htmlDesc: String): String {
-    return htmlDesc.substring(htmlDesc.indexOf("<p>") + 3, htmlDesc.indexOf("</p>"))
 }

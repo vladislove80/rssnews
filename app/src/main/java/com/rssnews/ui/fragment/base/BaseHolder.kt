@@ -1,4 +1,4 @@
-package com.rssnews.ua.fragment.base
+package com.rssnews.ui.fragment.base
 
 import android.content.Context
 import android.view.LayoutInflater

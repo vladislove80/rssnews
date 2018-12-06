@@ -5,17 +5,12 @@ import com.rssnews.data.api.RssItem
 import com.rssnews.data.api.RssResponse
 import com.rssnews.data.model.NewsItem
 import com.rssnews.data.source.NewsDataSource
-import com.rssnews.util.getImageDescription
-import com.rssnews.util.getImageSrcFromHTML
-import com.rssnews.util.getNewsDescription
+import java.util.regex.Pattern
 
 /**
  * Created by Vladyslav Ulianytskyi on 04.12.2018.
  */
-class NewsRepository(
-    val newsRemoteDataSource: NewsDataSource<RssResponse>,
-    val newsLocalDataSource: NewsDataSource<List<NewsItem>>
-) : NewsDataSource<List<NewsItem>> {
+class NewsRepository(private val remoteDataSource: NewsDataSource<RssResponse>, private val localDataSource: NewsDataSource<List<NewsItem>>) : NewsDataSource<List<NewsItem>> {
 
     private var cachedNews: HashMap<String, List<NewsItem>> = HashMap()
 
@@ -32,12 +27,8 @@ class NewsRepository(
         else getNewsFromLocalDataSource(category, link, callback)
     }
 
-    private fun getNewsFromRemoteDataSource(
-        category: String,
-        link: String,
-        callback: NewsDataSource.LoadNewsCallback<List<NewsItem>>
-    ) {
-        newsRemoteDataSource.getNews(category, link, object : NewsDataSource.LoadNewsCallback<RssResponse> {
+    private fun getNewsFromRemoteDataSource(category: String, link: String, callback: NewsDataSource.LoadNewsCallback<List<NewsItem>>) {
+        remoteDataSource.getNews(category, link, object : NewsDataSource.LoadNewsCallback<RssResponse> {
             override fun onNewsLoaded(news: RssResponse) {
                 callback.onNewsLoaded(parseResponse(news).apply {
                     Log.d(TAG, "getNewsFromRemoteDataSource ${this}")
@@ -55,12 +46,8 @@ class NewsRepository(
         })
     }
 
-    private fun getNewsFromLocalDataSource(
-        category: String,
-        link: String,
-        callback: NewsDataSource.LoadNewsCallback<List<NewsItem>>
-    ) {
-        newsLocalDataSource.getNews(category, link, callback)
+    private fun getNewsFromLocalDataSource(category: String, link: String, callback: NewsDataSource.LoadNewsCallback<List<NewsItem>>) {
+        localDataSource.getNews(category, link, callback)
     }
 
 
@@ -70,9 +57,6 @@ class NewsRepository(
     }
 
     private fun refreshCache(category: String, news: List<NewsItem>) {
-        cachedNews[category]?.let {
-            if (it.isNotEmpty()) it.toMutableList().clear()
-        }
         cachedNews[category] = news
     }
 
@@ -88,15 +72,29 @@ class NewsRepository(
     }
 
     private fun creteItem(it: RssItem): NewsItem {
-        return NewsItem(
-            it.title,
-            it.pubDate,
-            it.author,
-            it.link,
-            imageLink = getImageSrcFromHTML(it.description),
-            imageDescription = getImageDescription(it.description),
-            description = getNewsDescription(it.description)
-        )
+        return NewsItem(it.title, it.pubDate, it.author, it.link, imageLink = getImageSrcFromHTML(it.description), imageDescription = getImageDescription(it.description), description = getNewsDescription(it.description))
+    }
+
+    private fun getImageSrcFromHTML(html: String): String {
+        Pattern.compile("<img[^>]*src=[\\\"']([^\\\"^']*)").matcher(html).apply {
+            return if (this.find()) {
+                val src = this.group()
+                src.substring(src.indexOf("src=") + 5, src.length)
+            } else ""
+        }
+    }
+
+    private fun getImageDescription(htmlDescription: String): String {
+        Pattern.compile("<img[^>]*title=[\\\"']([^\\\"^']*)").matcher(htmlDescription).apply {
+            return if (this.find()) {
+                val src = this.group()
+                src.substring(src.indexOf("title=") + 7, src.length).replace("&#39;", "\'")
+            } else ""
+        }
+    }
+
+    private fun getNewsDescription(htmlDesc: String): String {
+        return htmlDesc.substring(htmlDesc.indexOf("<p>") + 3, htmlDesc.indexOf("</p>"))
     }
 
     companion object {
@@ -105,17 +103,12 @@ class NewsRepository(
         private var INSTANCE: NewsRepository? = null
 
         @JvmStatic
-        fun getInstance(
-            newsRemoteDataSource: NewsDataSource<RssResponse>,
-            newsLocalDataSource: NewsDataSource<List<NewsItem>>
-        ) = INSTANCE ?: synchronized(NewsRepository::class.java) {
-            INSTANCE ?: NewsRepository(
-                newsRemoteDataSource,
-                newsLocalDataSource
-            ).also {
-                INSTANCE = it
-            }
-        }
+        fun getInstance(newsRemoteDataSource: NewsDataSource<RssResponse>, newsLocalDataSource: NewsDataSource<List<NewsItem>>) = INSTANCE
+                ?: synchronized(NewsRepository::class.java) {
+                    INSTANCE ?: NewsRepository(newsRemoteDataSource, newsLocalDataSource).also {
+                        INSTANCE = it
+                    }
+                }
 
         @JvmStatic
         fun destroyInstance() {

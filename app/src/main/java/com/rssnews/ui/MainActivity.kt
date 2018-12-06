@@ -1,12 +1,12 @@
-package com.rssnews.ua
+package com.rssnews.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rssnews.R
 import com.rssnews.data.model.Categories
-import com.rssnews.ua.fragment.base.BaseFragment
-import com.rssnews.ua.fragment.NewsFragment
+import com.rssnews.ui.fragment.news.NewsFragment
+import com.rssnews.ui.fragment.base.BaseFragment
 import com.rssnews.util.general
 import com.rssnews.util.regional
 import com.rssnews.util.sport
@@ -25,8 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setToolbar() {
         setSupportActionBar(toolbar)
-        val title = navigation.menu.getItem(0).title
-        supportActionBar?.title = title
+        supportActionBar?.title = navigation.menu.getItem(0).title
     }
 
     private fun addFragment(fragment: BaseFragment) {

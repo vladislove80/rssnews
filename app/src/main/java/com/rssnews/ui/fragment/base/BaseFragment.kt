@@ -1,4 +1,4 @@
-package com.rssnews.ua.fragment.base
+package com.rssnews.ui.fragment.base
 
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.rssnews.R
-import com.rssnews.ua.viewmodel.NewsViewModel
 import com.rssnews.data.model.Categories
 import com.rssnews.data.model.Category
 import com.rssnews.data.model.NewsItem
-import com.rssnews.ua.fragment.NewsAdapter
-import com.rssnews.ua.fragment.NewsCategoriesAdapter
+import com.rssnews.ui.fragment.news.NewsAdapter
+import com.rssnews.ui.fragment.category.NewsCategoriesAdapter
+import com.rssnews.ui.viewmodel.NewsViewModel
 import com.rssnews.util.gone
 import com.rssnews.util.obtainViewModel
 import com.rssnews.util.visible
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_news.*
  * Created by Vladyslav Ulianytskyi on 28.11.2018.
  */
 
-const val categoriesKey = "category"
+const val CATEGORIES_KEY = "category"
 
 open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
 
@@ -32,10 +32,10 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
     override fun onItemViewClick(view: View, model: Category) {
         when (view.id) {
             R.id.tvCategory -> {
-                getCategoriesAdapter().setSelected(model)
+                getCategoriesAdapter().setSelection(model)
                 getNewsAdapter().clearItems()
                 showProgress()
-                viewModel.getNews(model.categoryName, model.link)
+                viewModel.getNews(model)
             }
         }
     }
@@ -73,7 +73,7 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
     }
 
     private fun initCategoriesAdapter(): NewsCategoriesAdapter {
-        val categories = arguments?.getParcelable<Categories>(categoriesKey)?.categories ?: mutableListOf()
+        val categories = arguments?.getParcelable<Categories>(CATEGORIES_KEY)?.categories ?: mutableListOf()
         rvCategories.apply {
             val newsCategoriesAdapter = NewsCategoriesAdapter(this@BaseFragment)
             (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
@@ -83,7 +83,8 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
         }
     }
 
-    fun getCategoriesAdapter() = rvCategories.adapter as? NewsCategoriesAdapter ?: initCategoriesAdapter()
+    fun getCategoriesAdapter() = rvCategories.adapter as? NewsCategoriesAdapter
+            ?: initCategoriesAdapter()
 
     fun getNewsAdapter() = rvNews.adapter as? NewsAdapter ?: initNewsAdapter()
 
