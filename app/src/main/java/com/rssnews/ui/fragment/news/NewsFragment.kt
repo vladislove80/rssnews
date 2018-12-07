@@ -31,8 +31,10 @@ class NewsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val category = arguments?.getParcelable<Categories>(CATEGORIES_KEY)?.categories?.get(0)
-        viewModel.getNews(category ?: Category("", ""))
+        val category: Category = arguments?.getParcelable<Categories>(CATEGORIES_KEY)?.categories?.find {
+            it.isSelected
+        } ?: Category("", "")
+        viewModel.getNews(category)
         rvNews.addOnScrollListener(onScrollListener)
     }
 
