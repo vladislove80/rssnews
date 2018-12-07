@@ -11,9 +11,10 @@ import com.rssnews.R
 import com.rssnews.data.model.Categories
 import com.rssnews.data.model.Category
 import com.rssnews.data.model.NewsItem
-import com.rssnews.ui.fragment.news.NewsAdapter
 import com.rssnews.ui.fragment.category.NewsCategoriesAdapter
+import com.rssnews.ui.fragment.news.NewsAdapter
 import com.rssnews.ui.viewmodel.NewsViewModel
+import com.rssnews.ui.webViewActivityIntent
 import com.rssnews.util.gone
 import com.rssnews.util.obtainViewModel
 import com.rssnews.util.visible
@@ -64,7 +65,7 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
         rvNews.apply {
             val newsAdapter = NewsAdapter(object : BaseHolder.OnItemClickListener<NewsItem> {
                 override fun onItemViewClick(view: View, model: NewsItem) {
-                    //todo
+                    startActivity(context.webViewActivityIntent(model.newsLink))
                 }
             })
             adapter = newsAdapter
@@ -73,7 +74,8 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
     }
 
     private fun initCategoriesAdapter(): NewsCategoriesAdapter {
-        val categories = arguments?.getParcelable<Categories>(CATEGORIES_KEY)?.categories ?: mutableListOf()
+        val categories = arguments?.getParcelable<Categories>(CATEGORIES_KEY)?.categories
+                ?: mutableListOf()
         rvCategories.apply {
             val newsCategoriesAdapter = NewsCategoriesAdapter(this@BaseFragment)
             (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false

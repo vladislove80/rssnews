@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rssnews.data.NewsRepository
 import com.rssnews.data.model.NewsItem
-import com.rssnews.data.source.DataSourceImpl
 import com.rssnews.data.source.DataSource
+import com.rssnews.data.source.DataSourceImpl
 import com.rssnews.data.source.RemoteDataSourceImpl
 
 /**
@@ -17,9 +17,7 @@ class ViewModelFactory private constructor(private val newsRepository: DataSourc
     ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = (
-            if (modelClass.isAssignableFrom(NewsViewModel::class.java)) NewsViewModel(
-                newsRepository
-            )
+            if (modelClass.isAssignableFrom(NewsViewModel::class.java)) NewsViewModel(newsRepository)
             else throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")) as T
 
     companion object {
@@ -31,12 +29,11 @@ class ViewModelFactory private constructor(private val newsRepository: DataSourc
         fun getInstance() =
             INSTANCE
                 ?: synchronized(ViewModelFactory::class.java) {
-                INSTANCE
-                    ?: ViewModelFactory(
-                        NewsRepository.getInstance(RemoteDataSourceImpl, DataSourceImpl)
-                    ).also { INSTANCE = it }
-            }
-
+                    INSTANCE
+                        ?: ViewModelFactory(
+                            NewsRepository.getInstance(RemoteDataSourceImpl, DataSourceImpl)
+                        ).also { INSTANCE = it }
+                }
 
         @VisibleForTesting
         fun destroyInstance() {
