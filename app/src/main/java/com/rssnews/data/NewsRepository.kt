@@ -3,19 +3,20 @@ package com.rssnews.data
 import android.util.Log
 import com.rssnews.data.api.RssResponse
 import com.rssnews.data.model.NewsItem
-import com.rssnews.data.source.NewsDataSource
+import com.rssnews.data.source.DataSource
+import com.rssnews.data.source.RemoteDataSource
 
 /**
  * Created by Vladyslav Ulianytskyi on 04.12.2018.
  */
 class NewsRepository(
-    private val remoteDataSource: NewsDataSource<RssResponse>,
-    private val localDataSource: NewsDataSource<List<NewsItem>>
-) : NewsDataSource<List<NewsItem>> {
+    private val remoteDataSource: RemoteDataSource<RssResponse>,
+    private val localDataSource: DataSource<List<NewsItem>>
+) : DataSource<List<NewsItem>> {
 
     private var cachedNews: HashMap<String, List<NewsItem>> = HashMap()
 
-    override fun getNews(category: String, link: String, callback: NewsDataSource.LoadNewsCallback<List<NewsItem>>) {
+    override fun getNews(category: String, link: String, callback: DataSource.Callback<List<NewsItem>>) {
         if (cachedNews.isNotEmpty()) {
             cachedNews[category]?.let {
                 callback.onNewsLoaded(it)
@@ -23,7 +24,7 @@ class NewsRepository(
             }
         }
 
-        //todo implement LocalDataSource
+        //todo implement DataSourceImpl
         if (true) getNewsFromRemoteDataSource(category, link, callback)
         else getNewsFromLocalDataSource(category, link, callback)
     }
@@ -31,21 +32,21 @@ class NewsRepository(
     private fun getNewsFromRemoteDataSource(
         category: String,
         link: String,
-        callback: NewsDataSource.LoadNewsCallback<List<NewsItem>>
+        callback: DataSource.Callback<List<NewsItem>>
     ) {
-        remoteDataSource.getNews(category, link, object : NewsDataSource.LoadNewsCallback<RssResponse> {
+        remoteDataSource.getNews(category, link, object : RemoteDataSource.Callback<RssResponse> {
             override fun onNewsLoaded(news: RssResponse) {
                 callback.onNewsLoaded(NewsMapper.rssResponseToItems(news).apply {
                     Log.d(TAG, "getNewsFromRemoteDataSource ${this}")
                     refreshCache(category, this)
-                    //todo implement LocalDataSource
+                    //todo implement DataSourceImpl
 //                    refreshLocalDataSource(category, this)
                 })
             }
 
             override fun onNewsNotAvailable(t: Throwable) {
                 Log.d(TAG, "getNewsFromRemoteDataSource $t")
-                //todo implement LocalDataSource
+                //todo implement DataSourceImpl
 //                getNewsFromLocalDataSource(category, link, callback)
             }
         })
@@ -54,13 +55,13 @@ class NewsRepository(
     private fun getNewsFromLocalDataSource(
         category: String,
         link: String,
-        callback: NewsDataSource.LoadNewsCallback<List<NewsItem>>
+        callback: DataSource.Callback<List<NewsItem>>
     ) {
         localDataSource.getNews(category, link, callback)
     }
 
 
-    //todo implement LocalDataSource
+    //todo implement DataSourceImpl
     private fun refreshLocalDataSource(category: String, newsItem: List<NewsItem>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -69,7 +70,7 @@ class NewsRepository(
         cachedNews[category] = news
     }
 
-    //todo implement LocalDataSource
+    //todo implement DataSourceImpl
     override fun saveNews(newsItem: NewsItem) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -81,11 +82,11 @@ class NewsRepository(
 
         @JvmStatic
         fun getInstance(
-            newsRemoteDataSource: NewsDataSource<RssResponse>,
-            newsLocalDataSource: NewsDataSource<List<NewsItem>>
+            remoteDataSource: RemoteDataSource<RssResponse>,
+            localDataSource: DataSource<List<NewsItem>>
         ) = INSTANCE
             ?: synchronized(NewsRepository::class.java) {
-                INSTANCE ?: NewsRepository(newsRemoteDataSource, newsLocalDataSource).also {
+                INSTANCE ?: NewsRepository(remoteDataSource, localDataSource).also {
                     INSTANCE = it
                 }
             }

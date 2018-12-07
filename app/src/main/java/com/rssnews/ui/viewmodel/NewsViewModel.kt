@@ -4,12 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rssnews.data.model.Category
 import com.rssnews.data.model.NewsItem
-import com.rssnews.data.source.NewsDataSource
+import com.rssnews.data.source.DataSource
 
 /**
  * Created by Vladyslav Ulianytskyi on 30.11.2018.
  */
-class NewsViewModel(private val newsRepository: NewsDataSource<List<NewsItem>>) : ViewModel() {
+class NewsViewModel(private val newsRepository: DataSource<List<NewsItem>>) : ViewModel() {
 
     val newsLiveData: MutableLiveData<List<NewsItem>> = MutableLiveData()
     val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
@@ -17,7 +17,7 @@ class NewsViewModel(private val newsRepository: NewsDataSource<List<NewsItem>>) 
 
     fun getNews(category: Category) {
         this.lastRequestedCategory = category
-        newsRepository.getNews(category.categoryName, category.link, object : NewsDataSource.LoadNewsCallback<List<NewsItem>> {
+        newsRepository.getNews(category.categoryName, category.link, object : DataSource.Callback<List<NewsItem>> {
             override fun onNewsNotAvailable(t: Throwable) {
                 errorLiveData.postValue(t)
             }
