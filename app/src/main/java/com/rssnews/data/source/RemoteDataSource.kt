@@ -10,7 +10,7 @@ import retrofit2.Response
 /**
  * Created by Vladyslav Ulianytskyi on 05.12.2018.
  */
-object NewsRemoteDataSource : NewsDataSource<RssResponse> {
+object RemoteDataSource : NewsDataSource<RssResponse> {
     private const val baseURL = "https://rss.cbc.ca/"
     override fun getNews(category: String, link: String, callback: NewsDataSource.LoadNewsCallback<RssResponse>) {
         CBCApi.create(baseURL).getRssData(link).enqueue(object : Callback<RssResponse> {

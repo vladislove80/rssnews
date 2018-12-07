@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.rssnews.data.source.NewsRemoteDataSource
+import com.rssnews.data.source.RemoteDataSource
 import com.rssnews.data.NewsRepository
 import com.rssnews.data.model.NewsItem
 import com.rssnews.data.source.NewsDataSource
-import com.rssnews.data.source.NewsLocalDataSource
+import com.rssnews.data.source.LocalDataSource
 
 /**
  * Created by Vladyslav Ulianytskyi on 05.12.2018.
@@ -33,7 +33,7 @@ class ViewModelFactory private constructor(private val newsRepository: NewsDataS
                 ?: synchronized(ViewModelFactory::class.java) {
                 INSTANCE
                     ?: ViewModelFactory(
-                        NewsRepository.getInstance(NewsRemoteDataSource, NewsLocalDataSource)
+                        NewsRepository.getInstance(RemoteDataSource, LocalDataSource)
                     ).also { INSTANCE = it }
             }
 
