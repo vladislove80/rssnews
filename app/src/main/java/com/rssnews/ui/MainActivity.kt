@@ -5,11 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rssnews.R
 import com.rssnews.data.model.Categories
+import com.rssnews.data.source.RemoteDataSourceImpl.general
+import com.rssnews.data.source.RemoteDataSourceImpl.regional
+import com.rssnews.data.source.RemoteDataSourceImpl.sport
 import com.rssnews.ui.fragment.news.NewsFragment
 import com.rssnews.ui.fragment.base.BaseFragment
-import com.rssnews.util.general
-import com.rssnews.util.regional
-import com.rssnews.util.sport
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
