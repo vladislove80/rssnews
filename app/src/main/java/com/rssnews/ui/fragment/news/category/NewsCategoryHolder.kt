@@ -1,4 +1,4 @@
-package com.rssnews.ui.fragment.category
+package com.rssnews.ui.fragment.news.category
 
 import android.util.Log
 import android.view.ViewGroup

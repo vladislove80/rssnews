@@ -11,7 +11,7 @@ import com.rssnews.R
 import com.rssnews.data.model.Categories
 import com.rssnews.data.model.Category
 import com.rssnews.data.model.NewsItem
-import com.rssnews.ui.fragment.category.NewsCategoriesAdapter
+import com.rssnews.ui.fragment.news.category.NewsCategoriesAdapter
 import com.rssnews.ui.fragment.news.NewsAdapter
 import com.rssnews.ui.viewmodel.NewsViewModel
 import com.rssnews.ui.webViewActivityIntent
@@ -80,6 +80,7 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
             val newsCategoriesAdapter = NewsCategoriesAdapter(this@BaseFragment)
             (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
             newsCategoriesAdapter.addNewItems(categories)
+            scrollToPosition(categories.indexOf(categories.find { it.isSelected }) )
             adapter = newsCategoriesAdapter
             return newsCategoriesAdapter
         }
