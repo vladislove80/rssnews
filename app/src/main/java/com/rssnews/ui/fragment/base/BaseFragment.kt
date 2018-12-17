@@ -11,8 +11,8 @@ import com.rssnews.R
 import com.rssnews.data.model.Categories
 import com.rssnews.data.model.Category
 import com.rssnews.data.model.NewsItem
-import com.rssnews.ui.fragment.news.category.NewsCategoriesAdapter
 import com.rssnews.ui.fragment.news.NewsAdapter
+import com.rssnews.ui.fragment.news.category.NewsCategoriesAdapter
 import com.rssnews.ui.viewmodel.NewsViewModel
 import com.rssnews.ui.webViewActivityIntent
 import com.rssnews.util.gone
@@ -33,9 +33,9 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
     override fun onItemViewClick(view: View, model: Category) {
         when (view.id) {
             R.id.tvCategory -> {
+                showProgress()
                 getCategoriesAdapter().setSelection(model)
                 getNewsAdapter().clearItems()
-                showProgress()
                 viewModel.getNews(model)
             }
         }
@@ -55,7 +55,7 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
         super.onViewCreated(view, savedInstanceState)
 
         btnRetry.setOnClickListener {
-            //todo implement retry get data
+            viewModel.retryGetNews()
         }
         initCategoriesAdapter()
         initNewsAdapter()
@@ -74,20 +74,18 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
     }
 
     private fun initCategoriesAdapter(): NewsCategoriesAdapter {
-        val categories = arguments?.getParcelable<Categories>(CATEGORIES_KEY)?.categories
-                ?: mutableListOf()
+        val categories = arguments?.getParcelable<Categories>(CATEGORIES_KEY)?.categories ?: mutableListOf()
         rvCategories.apply {
             val newsCategoriesAdapter = NewsCategoriesAdapter(this@BaseFragment)
             (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
             newsCategoriesAdapter.addNewItems(categories)
-            scrollToPosition(categories.indexOf(categories.find { it.isSelected }) )
+            scrollToPosition(categories.indexOf(categories.find { it.isSelected }))
             adapter = newsCategoriesAdapter
             return newsCategoriesAdapter
         }
     }
 
-    fun getCategoriesAdapter() = rvCategories.adapter as? NewsCategoriesAdapter
-            ?: initCategoriesAdapter()
+    fun getCategoriesAdapter() = rvCategories.adapter as? NewsCategoriesAdapter ?: initCategoriesAdapter()
 
     fun getNewsAdapter() = rvNews.adapter as? NewsAdapter ?: initNewsAdapter()
 
@@ -96,6 +94,7 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
         btnRetry.gone()
 //        rvCategories.gone()
         progressBar.visible()
+        tvRetryMessage.gone()
     }
 
     fun showContent() {
@@ -103,11 +102,13 @@ open class BaseFragment : Fragment(), BaseHolder.OnItemClickListener<Category> {
         rvCategories.visible()
         btnRetry.gone()
         progressBar.gone()
+        tvRetryMessage.gone()
     }
 
     fun showRetry() {
         rvNews.gone()
 //        rvCategories.gone()
+        tvRetryMessage.visible()
         btnRetry.visible()
         progressBar.gone()
     }
