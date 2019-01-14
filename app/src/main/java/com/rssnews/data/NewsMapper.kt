@@ -3,6 +3,8 @@ package com.rssnews.data
 import com.rssnews.data.api.RssItem
 import com.rssnews.data.api.RssResponse
 import com.rssnews.data.model.NewsItem
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 
 /**
@@ -16,16 +18,21 @@ class NewsMapper {
             }
         }
 
-        private fun creteItem(it: RssItem): NewsItem {
+        private fun creteItem(rssItem: RssItem): NewsItem {
             return NewsItem(
-                it.title,
-                it.pubDate,
-                it.author,
-                it.link,
-                imageLink = getImageSrcFromHTML(it.description),
-                imageDescription = getImageDescription(it.description),
-                description = getNewsDescription(it.description)
+                title = rssItem.title,
+                date = getDate(rssItem.pubDate),
+                author = rssItem.author,
+                newsLink = rssItem.link,
+                imageLink = getImageSrcFromHTML(rssItem.description),
+                imageDescription = getImageDescription(rssItem.description),
+                description = getNewsDescription(rssItem.description)
             )
+        }
+
+        private fun getDate(pubDate: String): String {
+            val simpleDateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.ENGLISH)
+            return simpleDateFormat.format(simpleDateFormat.parse(pubDate))
         }
 
         private fun getImageSrcFromHTML(html: String): String {

@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.news_row.*
 
 class NewsHolder(recyclerView: ViewGroup) : BaseHolder<NewsItem>(recyclerView, R.layout.news_row, intArrayOf()) {
     override fun bindItem(model: NewsItem) {
-        val subtitle = model.author + " " + model.date
         val apply = RequestOptions().apply {
             placeholder(R.drawable.placeholder)
             error(R.drawable.placeholder)
@@ -24,12 +23,10 @@ class NewsHolder(recyclerView: ViewGroup) : BaseHolder<NewsItem>(recyclerView, R
             priority(Priority.HIGH)
         }
         tvTitle.text = model.title
-        tvAuthorAndDate.text = subtitle
+        tvAuthor.text = model.author
+        tvDate.text = model.date
         iv.apply {
-            Glide.with(context)
-                .load(model.imageLink)
-                .apply(apply)
-                .into(this)
+            Glide.with(context).load(model.imageLink).apply(apply).into(this)
         }
         tvImageDescription.text = model.imageDescription
         tvDescription.text = model.description
