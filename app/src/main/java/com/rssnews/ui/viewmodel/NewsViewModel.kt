@@ -28,5 +28,10 @@ class NewsViewModel(private val newsRepository: DataSource<List<NewsItem>>) : Vi
         })
     }
 
-    //todo method for Retry button to request last requested category
+    fun retryGetNews() {
+        val category = lastRequestedCategory
+        if (category != null) {
+            getNews(category)
+        }
+    }
 }

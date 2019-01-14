@@ -46,6 +46,7 @@ class NewsRepository(
 
             override fun onNewsNotAvailable(t: Throwable) {
                 Log.d(TAG, "getNewsFromRemoteDataSource $t")
+                callback.onNewsNotAvailable(t)
                 //todo implement DataSourceImpl
 //                getNewsFromLocalDataSource(category, link, callback)
             }
